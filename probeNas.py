@@ -40,7 +40,7 @@ for drive in nas_temp_drives :
     oids.append(nas_temp_snmpprefix % drive['id'])
 
 for volume in nas_space_volumes : 
-    for i in [4, 5, 6] :
+    for i in [5, 6] :
         oids.append(nas_space_snmpprefix % (i, volume['id']))
 
 cmdGen = cmdgen.CommandGenerator()
@@ -53,15 +53,25 @@ elif errorStatus:
 
 results = {}
 
+# result transcoding, from list to dict
 for name, val in varBinds:
     results[name.prettyPrint()] = val
 
+# send values to domoticz for drives temperatures
 for drive in nas_temp_drives :
     #    http://$DOMO_IP:$DOMO_PORT/json.htm?type=command&param=udevice&idx=$NAS_HD1_TEMP_IDX&nvalue=0&svalue=$HDtemp1
     snmp_id = nas_temp_snmpprefix % drive['id']
     url = "http://%s/json.htm?type=command&param=udevice&idx=%s&nvalue=0&svalue=%s" % (domoticzserver, drive['idx'], results[snmp_id])
-    print(url)
-    request = urllib2.Request(url)
-    response = urllib2.urlopen(request)
+    urllib2.urlopen(urllib2.Request(url))
+
+
+# send values to domoticz for volume usage
+for volume in nas_space_volumes :
+    hd_total = results[nas_space_snmpprefix % (5, volume['id'])]
+    hd_used = results[nas_space_snmpprefix % (6, volume['id'])]
+
+    hd_free = 100 * float(hd_used) / float(hd_total)
+    url = "http://%s/json.htm?type=command&param=udevice&idx=%s&nvalue=0&svalue=%s" % (domoticzserver, volume['idx'], hd_free)
+    urllib2.urlopen(urllib2.Request(url))
 
 
