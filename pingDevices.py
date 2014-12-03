@@ -13,17 +13,21 @@ import yaml
 
 # Settings for the domoticz server
 domoticzserver = '127.0.0.1:8080'
+
+# URL of Free mobile SMS API
 smsAPIUrl = 'https://smsapi.free-mobile.fr/sendmsg'
 
+# get params from YAML file (name after this script .yaml)
 params = yaml.load(open(os.path.splitext(__file__)[0] + '.yaml'))
 smsAPIUser = params['smsAPIUser']
 smsAPIPass = params['smsAPIPass']
 devices = params['devices']
 
+# function to send notification
 def sendNotification(msg) :
     r = requests.get(smsAPIUrl, params={u'user': smsAPIUser, u'pass': smsAPIPass, u'msg': msg}, verify=False)
 
-
+# for each device do check
 for device in devices : 
     idx = device['idx']
     timeout = device['timeout']
@@ -38,8 +42,5 @@ for device in devices :
         sendNotification(u"DOMOTICZ: Pas de réponse de la sonde %s depuis plus de %s minutes (%s)" % (jsonData['result'][0]['Name'], timeout, diff))
     else :
         print u"derniÃ¨re rÃ©ponse de %s il y a %s (< au timeout de %s minutes)" % (jsonData['result'][0]['Name'], diff, timeout)
-
-
-
 
 
