@@ -1,7 +1,9 @@
 #!/usr/bin/python
+#   coding=UTF-8
+#
 #   Title: probeNas.py
-#   Author: Chopper_Rob
-#   Date: 05-08-2014
+#   Author: Luc Fouin <luc.fouin@gmail.com>
+#   Date: 03/12/2014
 #   Info: get infos from nas and store them in domoticz
  
 from pysnmp.entity.rfc3413.oneliner import cmdgen

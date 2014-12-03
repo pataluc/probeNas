@@ -1,0 +1,6 @@
+smsAPIUser: "your_free_mobile_user"
+smsAPIPass: "you_free_mobile_api_key"
+devices:
+  - idx: 23         # domoticz device id
+    timeout: 10     # timeout in minutes
+
