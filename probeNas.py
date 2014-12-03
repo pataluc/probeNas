@@ -27,9 +27,8 @@ nas_temp_drives = [
 
 nas_space_snmpprefix = "1.3.6.1.2.1.25.2.3.1.%s.%s"
 nas_space_volumes = [
-        {'id': 36, 'idx': 29}, # id: SNMP id of the volume, idx: domoticz id of the percentage probe
-        {'id': 37, 'idx': 35},
-        {'id': 38, 'idx': 36}
+        {'id': 39, 'idx': 29}, # id: SNMP id of the volume, idx: domoticz id of the percentage probe
+        {'id': 38, 'idx': 35}
     ]
 
 #TODO: ping server with sthing like :  subprocess.check_call(['ping','-c1',ip])
