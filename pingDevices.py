@@ -10,6 +10,9 @@ from datetime import *
 import os
 import requests
 import yaml
+import mylogging
+
+logger = mylogging.getLogger(__name__)
 
 # Settings for the domoticz server
 domoticzserver = '127.0.0.1:8080'
@@ -36,11 +39,12 @@ for device in devices :
     jsonData = requests.get(url).json
     
     diff = datetime.today() - datetime.strptime(jsonData['result'][0]['LastUpdate'], '%Y-%m-%d %H:%M:%S')
+    logger.debug(diff)
 
     if diff.total_seconds() > timeout * 60 :
-        print u"Envoi notif, pas de réponse de la sonde %s depuis plus de %s minutes (%s)" % (jsonData['result'][0]['Name'], timeout, diff)
+        logger.info(u"Envoi notif, pas de réponse de la sonde %s depuis plus de %s minutes (%s)" % (jsonData['result'][0]['Name'], timeout, diff))
         sendNotification(u"DOMOTICZ: Pas de réponse de la sonde %s depuis plus de %s minutes (%s)" % (jsonData['result'][0]['Name'], timeout, diff))
     else :
-        print u"derniÃ¨re rÃ©ponse de %s il y a %s (< au timeout de %s minutes)" % (jsonData['result'][0]['Name'], diff, timeout)
+        logger.info(u"dernière réponse de %s il y a %s (< au timeout de %s minutes)" % (jsonData['result'][0]['Name'], diff, timeout))
 
 
